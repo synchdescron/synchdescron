@@ -1,0 +1,62 @@
+import pyshorteners
+PASSWORD_FNAME = "data"
+
+
+def choices():
+    print("Please choose what you would like to do.")
+    choice = int(input("For Sigining Up Type 1 and For Signing in Type 2: "))
+    if choice == 1:
+       return getdetails()
+    elif choice == 2:
+       return checkdetails()
+    else:
+       print("Please enter number 1 or 2\n")
+
+def getdetails():
+    print("Please Provide")
+    name = str(input("Name: "))
+    password = str(input("Password: "))
+    f = open("data",'r')
+    info = f.read()
+    if name in info:
+        return "Name Unavailable. Please Try Again"
+    f.close()
+    f = open("data",'w')
+    info = info + " " +name + " " + password
+    f.write(info)
+    f.close()
+
+def checkdetails():
+    print("Please Provide")
+    name = str(input("Name: "))
+    password = str(input("Password: "))
+    f = open("data",'r')
+    info = f.read()
+    info = info.split()
+    if name in info:
+        index = info.index(name) + 1
+        usr_password = info[index]
+        if usr_password == password:
+            print ("Welcome Back, " + name + "!\n")
+            return synch()
+        else:
+            return "Password entered is wrong"
+    else:
+        return "Name not found. Please Sign Up.\n"
+
+def synch():
+    while (1):
+        link = input("Enter link: ")
+        shortener = pyshorteners.Shortener()
+        x = shortener.tinyurl.short(link)
+        f = open("links",'a')
+        f.write(x+"\n")
+        print(x)
+        f.close()
+        flag=input("Generated Successfully! \n Press 0 to logout")
+        if(input==0):
+            break
+
+
+while(1):
+    print(choices())
